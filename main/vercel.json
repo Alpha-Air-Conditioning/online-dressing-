@@ -11,4 +11,17 @@
       "dest": "main/wsgi.py"
     }
   ]
+}{
+  "builds": [
+    {
+      "src": "main/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "main/wsgi.py"
+    }
+  ]
 }
