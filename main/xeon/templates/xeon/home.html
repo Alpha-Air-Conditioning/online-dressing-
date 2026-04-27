@@ -1,0 +1,232 @@
+{% extends 'xeon/base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+
+<!-- ═══════════════════════════════════════════ HERO SLIDER -->
+<section class="hero" aria-label="Featured collection">
+  {% if hero_banners %}
+    {% for banner in hero_banners %}
+    <div class="hero-slide {% if forloop.first %}active{% endif %}">
+      <picture>
+        {% if banner.mobile_image %}
+        <source media="(max-width: 768px)" srcset="{{ banner.mobile_image.url }}">
+        {% endif %}
+        <img src="{{ banner.image.url }}" alt="{{ banner.title }}" class="hero-image" loading="{{ forloop.first|yesno:'eager,lazy' }}" />
+      </picture>
+      <div class="hero-overlay">
+        <p class="hero-subtitle">New Season — Spring / Summer 2024</p>
+        <h1 class="hero-title">{{ banner.title }}</h1>
+        <a href="{{ banner.button_link }}" class="btn-hero">{{ banner.button_text }}</a>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+  <!-- Fallback if no banner set in admin -->
+  <div class="hero-slide active" style="background:linear-gradient(135deg,#f9cac5 0%,#fdf0ee 100%);">
+    <div class="hero-overlay" style="background:linear-gradient(to bottom,rgba(0,0,0,0.05),rgba(0,0,0,0.3));">
+      <p class="hero-subtitle">New Season — Spring / Summer 2024</p>
+      <h1 class="hero-title">Summer <em>in the</em><br>Making</h1>
+      <a href="{% url 'xeon:collection' %}" class="btn-hero">Shop Now</a>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if hero_banners|length > 1 %}
+  <div class="hero-dots" role="tablist" aria-label="Slider navigation">
+    {% for banner in hero_banners %}
+    <button class="hero-dot {% if forloop.first %}active{% endif %}"
+            role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            aria-label="Slide {{ forloop.counter }}"></button>
+    {% endfor %}
+  </div>
+  {% endif %}
+</section>
+
+<!-- ═══════════════════════════════════════ LATEST PRODUCTS -->
+{% if latest_products %}
+<section class="section section--light" id="latest-products">
+  <div class="container">
+    <header class="section-header fade-up">
+      <p class="section-eyebrow">Just Arrived</p>
+      <h2 class="section-title">Latest <em>Drops</em></h2>
+      <div class="section-divider"></div>
+    </header>
+
+    <div class="product-grid">
+      {% for product in latest_products %}
+      <article class="product-card fade-up"
+               data-product-id="{{ product.id }}"
+               data-href="{{ product.get_absolute_url }}"
+               style="transition-delay: {{ forloop.counter0|add:0 }}00ms;"
+               tabindex="0" role="article" aria-label="{{ product.name }}">
+
+        <div class="product-card-img-wrap">
+          {% if product.image %}
+          <img src="{{ product.image.url }}"
+               alt="{{ product.name }}"
+               class="product-card-img main-img"
+               loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" />
+          {% if product.hover_image %}
+          <img src="{{ product.hover_image.url }}"
+               alt="{{ product.name }} hover"
+               class="product-card-img hover-img"
+               loading="lazy" />
+          {% endif %}
+          {% else %}
+          <div class="product-card-img" style="display:flex;align-items:center;justify-content:center;font-size:48px;">👗</div>
+          {% endif %}
+
+          <!-- Badges -->
+          {% if product.is_on_sale %}
+          <span class="product-badge badge-sale">–{{ product.discount_percent }}%</span>
+          {% elif product.is_new %}
+          <span class="product-badge badge-new">New</span>
+          {% endif %}
+
+          <!-- Wishlist -->
+          <button class="product-wishlist" aria-label="Add to wishlist">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            </svg>
+          </button>
+
+          <!-- Quick Add Overlay -->
+          <div class="quick-add-overlay">
+            {% with product.get_sizes_list as sizes %}
+            {% if sizes %}
+            <div class="quick-add-sizes">
+              {% for size in sizes %}
+              <button class="size-chip {% if forloop.first %}selected{% endif %}" data-size="{{ size }}">{{ size }}</button>
+              {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+            <button class="btn-quick-add"><span>Add to Cart</span></button>
+          </div>
+        </div>
+
+        <div class="product-info">
+          {% if product.category %}
+          <span class="product-category-tag">{{ product.category.name }}</span>
+          {% endif %}
+          <h3 class="product-name">{{ product.name }}</h3>
+          <div class="product-prices">
+            <span class="product-price {% if product.is_on_sale %}sale{% endif %}">₹{{ product.price }}</span>
+            {% if product.is_on_sale %}
+            <span class="product-original-price">₹{{ product.original_price }}</span>
+            {% endif %}
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+
+    <div class="text-center mt-8">
+      <a href="{% url 'xeon:collection' %}" class="btn btn-outline btn-lg">
+        View All Products
+      </a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ═══════════════════════════════════ COLLECTION HIGHLIGHT (older products auto-moved here) -->
+{% if collection_products %}
+<section class="section section--pink" id="collection">
+  <div class="container">
+    <header class="section-header fade-up">
+      <p class="section-eyebrow">Our Archive</p>
+      <h2 class="section-title">The <em>Collection</em></h2>
+      <div class="section-divider"></div>
+    </header>
+
+    <div class="product-grid">
+      {% for product in collection_products|slice:":8" %}
+      <article class="product-card fade-up"
+               data-product-id="{{ product.id }}"
+               data-href="{{ product.get_absolute_url }}"
+               tabindex="0" role="article" aria-label="{{ product.name }}">
+
+        <div class="product-card-img-wrap">
+          {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-card-img main-img" loading="lazy" />
+          {% if product.hover_image %}
+          <img src="{{ product.hover_image.url }}" alt="{{ product.name }} hover" class="product-card-img hover-img" loading="lazy" />
+          {% endif %}
+          {% else %}
+          <div class="product-card-img" style="display:flex;align-items:center;justify-content:center;font-size:48px;">👗</div>
+          {% endif %}
+
+          {% if product.is_on_sale %}
+          <span class="product-badge badge-sale">–{{ product.discount_percent }}%</span>
+          {% elif product.is_new %}
+          <span class="product-badge badge-new">New</span>
+          {% endif %}
+
+          <button class="product-wishlist" aria-label="Add to wishlist">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            </svg>
+          </button>
+
+          <div class="quick-add-overlay">
+            {% with product.get_sizes_list as sizes %}
+            {% if sizes %}
+            <div class="quick-add-sizes">
+              {% for size in sizes %}
+              <button class="size-chip {% if forloop.first %}selected{% endif %}" data-size="{{ size }}">{{ size }}</button>
+              {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+            <button class="btn-quick-add"><span>Add to Cart</span></button>
+          </div>
+        </div>
+
+        <div class="product-info">
+          {% if product.category %}
+          <span class="product-category-tag">{{ product.category.name }}</span>
+          {% endif %}
+          <h3 class="product-name">{{ product.name }}</h3>
+          <div class="product-prices">
+            <span class="product-price {% if product.is_on_sale %}sale{% endif %}">₹{{ product.price }}</span>
+            {% if product.is_on_sale %}
+            <span class="product-original-price">₹{{ product.original_price }}</span>
+            {% endif %}
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+
+    {% if collection_products|length > 8 %}
+    <div class="text-center mt-8">
+      <a href="{% url 'xeon:collection' %}" class="btn btn-primary btn-lg">
+        Browse Full Collection ({{ collection_products|length }} items)
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+<!-- ═══════════════════════════════════════ AS SEEN ON BANNER -->
+<section class="section section--dark" style="padding:48px 0;">
+  <div class="container text-center">
+    <p class="section-eyebrow" style="color:rgba(255,255,255,0.5);">As Seen On</p>
+    <h2 class="section-title" style="color:white;font-size:clamp(28px,4vw,48px);">
+      Loved by <em>Fashion Creators</em>
+    </h2>
+    <p style="color:rgba(255,255,255,0.6);font-size:14px;margin-top:12px;max-width:500px;margin-inline:auto;">
+      Join thousands of style enthusiasts who've fallen in love with XEON's craftsmanship.
+    </p>
+    <a href="{% url 'xeon:collection' %}" class="btn btn-pink btn-lg" style="margin-top:32px;display:inline-flex;">
+      Shop The Look
+    </a>
+  </div>
+</section>
+
+{% endblock %}

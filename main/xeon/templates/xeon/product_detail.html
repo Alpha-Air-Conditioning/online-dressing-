@@ -1,0 +1,188 @@
+{% extends 'xeon/base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<section class="section section--light" style="padding-top:48px;">
+  <div class="container">
+
+    <div class="product-detail-grid">
+
+      <!-- ── LEFT: Images ────────────────────────────────────── -->
+      <div class="product-detail-images">
+        {% if product.image %}
+        <img src="{{ product.image.url }}"
+             alt="{{ product.name }}"
+             class="product-main-image"
+             loading="eager" />
+        {% else %}
+        <div class="product-main-image" style="display:flex;align-items:center;justify-content:center;font-size:100px;background:#f5f0ea;">👗</div>
+        {% endif %}
+      </div>
+
+      <!-- ── RIGHT: Info ─────────────────────────────────────── -->
+      <div class="product-detail-info">
+
+        <!-- Breadcrumb -->
+        <nav aria-label="Breadcrumb" style="font-size:11px;color:var(--color-text-muted);margin-bottom:16px;letter-spacing:0.08em;">
+          <a href="{% url 'xeon:home' %}">Home</a>
+          <span style="margin:0 6px;">›</span>
+          <a href="{% url 'xeon:collection' %}">Shop</a>
+          {% if product.category %}
+          <span style="margin:0 6px;">›</span>
+          <a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a>
+          {% endif %}
+          <span style="margin:0 6px;">›</span>
+          <span>{{ product.name }}</span>
+        </nav>
+
+        {% if product.category %}
+        <p class="product-detail-category">{{ product.category.name }}</p>
+        {% endif %}
+
+        <h1 class="product-detail-name">{{ product.name }}</h1>
+
+        <!-- Pricing -->
+        <div class="product-detail-prices">
+          <span class="product-detail-price {% if product.is_on_sale %}sale{% endif %}">₹{{ product.price }}</span>
+          {% if product.is_on_sale %}
+          <span class="product-detail-original">₹{{ product.original_price }}</span>
+          {% endif %}
+        </div>
+
+        {% if product.is_on_sale %}
+        <p class="product-detail-savings">You save ₹{{ product.original_price|add:"-"|add:product.price|floatformat:2 }} ({{ product.discount_percent }}% off)</p>
+        {% endif %}
+
+        <p class="tax-note">Inclusive of all taxes. Free shipping on orders above ₹999.</p>
+
+        <!-- Size Selector -->
+        {% if sizes %}
+        <div>
+          <p class="size-label">Select Size</p>
+          <div class="size-selector" role="group" aria-label="Size selection">
+            {% for size in sizes %}
+            <button class="size-btn {% if forloop.first %}selected{% endif %}"
+                    data-size="{{ size }}"
+                    aria-label="Size {{ size }}">
+              {{ size }}
+            </button>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Action Buttons -->
+        <div class="product-actions">
+          <button id="add-to-cart-btn"
+                  class="btn btn-outline btn-lg"
+                  data-product-id="{{ product.id }}"
+                  aria-label="Add {{ product.name }} to cart">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+            Add to Cart
+          </button>
+          <button id="buy-now-btn"
+                  class="btn btn-primary btn-lg"
+                  data-product-id="{{ product.id }}"
+                  aria-label="Buy {{ product.name }} now">
+            Buy It Now
+          </button>
+        </div>
+
+        <!-- Stock -->
+        {% if product.stock < 10 and product.stock > 0 %}
+        <p style="font-size:12px;color:var(--color-sale);font-weight:600;letter-spacing:0.08em;">
+          ⚠ Only {{ product.stock }} left in stock!
+        </p>
+        {% endif %}
+
+        <!-- Description Accordion -->
+        <div class="product-description">
+          <h3>Product Details</h3>
+          {% if product.description %}
+          <p>{{ product.description }}</p>
+          {% else %}
+          <p>
+            This beautiful piece is crafted with premium quality fabric and attention to detail.
+            Perfect for all occasions — from casual outings to special events.
+            Machine washable. True to size.
+          </p>
+          {% endif %}
+        </div>
+
+        <!-- Shipping Info -->
+        <div style="border-top:1px solid var(--color-border);padding-top:20px;margin-top:20px;">
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;gap:12px;align-items:flex-start;font-size:13px;">
+              <span style="font-size:18px;">🚚</span>
+              <div>
+                <strong style="display:block;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;">Free Delivery</strong>
+                <span style="color:var(--color-text-muted);">On orders above ₹999</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;font-size:13px;">
+              <span style="font-size:18px;">↩</span>
+              <div>
+                <strong style="display:block;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;">7-Day Returns</strong>
+                <span style="color:var(--color-text-muted);">Easy hassle-free returns & exchanges</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── RELATED PRODUCTS ──────────────────────────────────── -->
+    {% if related_products %}
+    <div style="margin-top:80px;">
+      <header class="section-header">
+        <p class="section-eyebrow">You May Also Like</p>
+        <h2 class="section-title">Related <em>Styles</em></h2>
+        <div class="section-divider"></div>
+      </header>
+      <div class="product-grid">
+        {% for prod in related_products %}
+        <article class="product-card fade-up"
+                 data-product-id="{{ prod.id }}"
+                 data-href="{{ prod.get_absolute_url }}"
+                 tabindex="0">
+          <div class="product-card-img-wrap">
+            {% if prod.image %}
+            <img src="{{ prod.image.url }}" alt="{{ prod.name }}" class="product-card-img" loading="lazy" />
+            {% else %}
+            <div class="product-card-img" style="display:flex;align-items:center;justify-content:center;font-size:48px;background:#f5f0ea;">👗</div>
+            {% endif %}
+            {% if prod.is_new %}<span class="product-badge badge-new">New</span>{% endif %}
+            <button class="product-wishlist" aria-label="Wishlist">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+              </svg>
+            </button>
+            <div class="quick-add-overlay">
+              <div class="quick-add-sizes">
+                {% for size in prod.get_sizes_list %}
+                <button class="size-chip {% if forloop.first %}selected{% endif %}" data-size="{{ size }}">{{ size }}</button>
+                {% endfor %}
+              </div>
+              <button class="btn-quick-add">Add to Cart</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">{{ prod.name }}</h3>
+            <div class="product-prices">
+              <span class="product-price">₹{{ prod.price }}</span>
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

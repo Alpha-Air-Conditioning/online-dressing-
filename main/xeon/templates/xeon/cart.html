@@ -1,0 +1,109 @@
+{% extends 'xeon/base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<section class="section section--light" style="padding-top:48px;">
+  <div class="container">
+    <header class="section-header fade-up" style="text-align:left;margin-bottom:32px;">
+      <h1 class="section-title" style="font-size:clamp(28px,4vw,42px);">Your <em>Cart</em></h1>
+    </header>
+
+    {% if cart_items %}
+    <div class="cart-grid" id="cart-body">
+
+      <!-- Cart Items -->
+      <div>
+        {% for item in cart_items %}
+        <div class="cart-item"
+             id="cart-item-{{ item.key }}"
+             data-key="{{ item.key }}"
+             data-price="{{ item.product.price }}">
+
+          <!-- Image -->
+          {% if item.product.image %}
+          <img src="{{ item.product.image.url }}"
+               alt="{{ item.product.name }}"
+               class="cart-item-img" loading="lazy" />
+          {% else %}
+          <div class="cart-item-img" style="display:flex;align-items:center;justify-content:center;font-size:36px;background:#f5f0ea;">👗</div>
+          {% endif %}
+
+          <!-- Info -->
+          <div>
+            <h3 class="cart-item-name">{{ item.product.name }}</h3>
+            <p class="cart-item-meta">
+              {% if item.size %}Size: {{ item.size }} &nbsp;·&nbsp; {% endif %}
+              ₹{{ item.product.price }} each
+            </p>
+
+            <!-- Qty Control -->
+            <div class="qty-control" role="group" aria-label="Quantity">
+              <button class="qty-btn qty-minus" aria-label="Decrease quantity">−</button>
+              <span class="qty-val" aria-live="polite">{{ item.quantity }}</span>
+              <button class="qty-btn qty-plus" aria-label="Increase quantity">+</button>
+            </div>
+
+            <button class="cart-remove" aria-label="Remove {{ item.product.name }} from cart">
+              Remove
+            </button>
+          </div>
+
+          <!-- Line Price -->
+          <div>
+            <p class="cart-item-price">₹{{ item.line_total|floatformat:2 }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Cart Summary -->
+      <aside class="cart-summary">
+        <h2 class="cart-summary-title">Order Summary</h2>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="summary-subtotal">₹{{ subtotal|floatformat:2 }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span id="summary-shipping">{% if shipping == 0 %}FREE{% else %}₹{{ shipping|floatformat:2 }}{% endif %}</span>
+        </div>
+        <p id="free-ship-note" class="free-shipping-note" style="{% if shipping != 0 %}display:none;{% endif %}">
+          🎉 You qualify for free shipping!
+        </p>
+
+        {% if shipping > 0 %}
+        <p style="font-size:11px;color:var(--color-text-muted);margin-top:4px;">
+          Add ₹{{ 999|add:"-"|add:subtotal|floatformat:0 }} more for free shipping
+        </p>
+        {% endif %}
+
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="summary-total">₹{{ total|floatformat:2 }}</span>
+        </div>
+
+        <a href="{% url 'xeon:checkout' %}" class="btn btn-primary btn-full btn-lg" style="margin-top:20px;">
+          Proceed to Checkout
+        </a>
+        <a href="{% url 'xeon:collection' %}" class="btn btn-outline btn-full" style="margin-top:10px;">
+          Continue Shopping
+        </a>
+      </aside>
+    </div>
+
+    {% else %}
+    <!-- Empty Cart -->
+    <div id="cart-body" class="empty-state">
+      <div class="empty-state-icon">🛍️</div>
+      <h2 class="empty-state-title">Your cart is empty</h2>
+      <p class="empty-state-text">Looks like you haven't added anything yet. Let's fix that!</p>
+      <a href="{% url 'xeon:collection' %}" class="btn btn-primary btn-lg">Browse Collection</a>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'xeon/base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+
+<!-- About Hero -->
+<div class="page-hero" style="background:linear-gradient(135deg,var(--color-pink-light) 0%,var(--color-pink) 100%);">
+  <h1 class="page-hero-title">Our <em>Story</em></h1>
+  <p class="page-hero-sub">Crafted with love, worn with confidence</p>
+</div>
+
+<section class="section section--light">
+  <div class="container">
+    <div style="max-width:720px;margin:0 auto;text-align:center;">
+      <p class="section-eyebrow">About XEON</p>
+      <h2 class="section-title">Where Style Meets <em>Soul</em></h2>
+      <div class="section-divider"></div>
+      <p style="font-size:16px;line-height:1.9;color:var(--color-text-muted);margin-top:28px;">
+        XEON was born from a simple belief — every woman deserves to feel extraordinary in what she wears.
+        We design clothes that celebrate the modern Indian woman: confident, graceful, and effortlessly chic.
+      </p>
+      <p style="font-size:16px;line-height:1.9;color:var(--color-text-muted);margin-top:16px;">
+        Each piece in our collection is thoughtfully designed and crafted using quality fabrics sourced
+        from artisans across India. From breezy summer dresses to elegant evening sets, every design
+        tells a story of style and substance.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--pink">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:40px;text-align:center;">
+      <div class="fade-up">
+        <div style="font-size:48px;margin-bottom:12px;">✦</div>
+        <h3 style="font-family:var(--font-serif);font-size:24px;margin-bottom:8px;">Premium Quality</h3>
+        <p style="font-size:14px;color:var(--color-text-muted);line-height:1.7;">
+          Every stitch and seam reflects our commitment to quality. We use only the finest fabrics for your comfort.
+        </p>
+      </div>
+      <div class="fade-up" style="transition-delay:100ms;">
+        <div style="font-size:48px;margin-bottom:12px;">💫</div>
+        <h3 style="font-family:var(--font-serif);font-size:24px;margin-bottom:8px;">Timeless Design</h3>
+        <p style="font-size:14px;color:var(--color-text-muted);line-height:1.7;">
+          Our designs strike the perfect balance between trend and timelessness — pieces you'll love for years.
+        </p>
+      </div>
+      <div class="fade-up" style="transition-delay:200ms;">
+        <div style="font-size:48px;margin-bottom:12px;">🌿</div>
+        <h3 style="font-family:var(--font-serif);font-size:24px;margin-bottom:8px;">Made in India</h3>
+        <p style="font-size:14px;color:var(--color-text-muted);line-height:1.7;">
+          Proudly crafted in India, supporting local artisans and sustainable fashion practices.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--light" style="text-align:center;">
+  <div class="container">
+    <h2 class="section-title fade-up">Ready to <em>Explore?</em></h2>
+    <p style="color:var(--color-text-muted);font-size:14px;margin-top:12px;margin-bottom:28px;" class="fade-up">
+      Discover our latest collection and find your perfect look.
+    </p>
+    <a href="{% url 'xeon:collection' %}" class="btn btn-primary btn-lg fade-up">Shop Now</a>
+  </div>
+</section>
+
+{% endblock %}

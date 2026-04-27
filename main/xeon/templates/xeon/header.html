@@ -1,0 +1,148 @@
+{% load static %}
+
+<!-- Announcement Bar -->
+<div class="announcement-bar">
+    <div class="marquee">
+        <div class="marquee-content">
+            <span>&bull; FREE SHIPPING + ADDITIONAL DISCOUNTS ON PREPAID ORDERS</span>
+            <span>&bull; ALL ORDERS ARE DISPATCHED IN 7-10 BUSINESS DAYS</span>
+            <span>&bull; FOR CUSTOMISATIONS PLEASE WHATSAPP ON +91 0000000000</span>
+            <span>&bull; FREE SHIPPING + ADDITIONAL DISCOUNTS ON PREPAID ORDERS</span>
+            <span>&bull; ALL ORDERS ARE DISPATCHED IN 7-10 BUSINESS DAYS</span>
+            <span>&bull; FOR CUSTOMISATIONS PLEASE WHATSAPP ON +91 0000000000</span>
+        </div>
+        <!-- Duplicated for seamless scrolling -->
+        <div class="marquee-content" aria-hidden="true">
+            <span>&bull; FREE SHIPPING + ADDITIONAL DISCOUNTS ON PREPAID ORDERS</span>
+            <span>&bull; ALL ORDERS ARE DISPATCHED IN 7-10 BUSINESS DAYS</span>
+            <span>&bull; FOR CUSTOMISATIONS PLEASE WHATSAPP ON +91 0000000000</span>
+            <span>&bull; FREE SHIPPING + ADDITIONAL DISCOUNTS ON PREPAID ORDERS</span>
+            <span>&bull; ALL ORDERS ARE DISPATCHED IN 7-10 BUSINESS DAYS</span>
+            <span>&bull; FOR CUSTOMISATIONS PLEASE WHATSAPP ON +91 0000000000</span>
+        </div>
+    </div>
+</div>
+
+<!-- Main Header -->
+<header class="main-header" id="header">
+    <div class="header-container">
+        <!-- Mobile Toggle -->
+        <div class="header-mobile-toggle">
+            <button id="mobileMenuBtn" aria-label="Open menu"><i class="ph ph-list"></i></button>
+        </div>
+        
+        <div class="header-logo">
+            <a href="/">
+                <h2>XEON</h2>
+            </a>
+        </div>
+        
+        <nav class="header-nav desktop-nav">
+            <ul>
+                <li><a href="{% url 'home' %}">HOME</a></li>
+                <li class="has-dropdown">
+                    <a href="#">NEW IN</a>
+                    <div class="mega-menu">
+                        <div class="mega-menu-content single-col">
+                            <ul>
+                                <li><a href="#">New Arrivals</a></li>
+                                <li><a href="#">Aurora Collection</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="#">BESTSELLERS</a></li>
+                <li class="has-dropdown">
+                    <a href="#">SHOP</a>
+                    <div class="mega-menu">
+                        <div class="mega-menu-content multi-col">
+                            <div class="menu-col">
+                                <h4>Clothing</h4>
+                                <ul>
+                                    <li><a href="#">Dresses</a></li>
+                                    <li><a href="#">Tops</a></li>
+                                    <li><a href="#">Co-ord Sets</a></li>
+                                    <li><a href="#">Jumpsuits</a></li>
+                                    <li><a href="#">Loungewear</a></li>
+                                </ul>
+                            </div>
+                            <div class="menu-col">
+                                <h4>Featured</h4>
+                                <ul>
+                                    <li><a href="#">Summertime Staples</a></li>
+                                    <li><a href="#">Evening Wear</a></li>
+                                    <li><a href="#">Bestsellers</a></li>
+                                    <li><a href="#" class="highlight-red">Archive Sale</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="has-dropdown">
+                    <a href="#">COLLECTIONS</a>
+                    <div class="mega-menu">
+                        <div class="mega-menu-content multi-col">
+                            <div class="menu-col">
+                                <h4>Collections</h4>
+                                <ul>
+                                    <li><a href="#">Aurora</a></li>
+                                    <li><a href="#">Fall Winter '21</a></li>
+                                    <li><a href="#">As Seen On</a></li>
+                                </ul>
+                            </div>
+                            <div class="menu-col">
+                                <h4>Curated Sets</h4>
+                                <ul>
+                                    <li><a href="#">Bestseller Trio By Amoshi</a></li>
+                                    <li><a href="#">72 Hour Dispatch</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="{% url 'xeon:archive_sale' %}" class="highlight-red">ARCHIVE SALE</a></li>
+                <li class="has-dropdown">
+                    <a href="#">ABOUT US</a>
+                    <div class="mega-menu">
+                        <div class="mega-menu-content single-col">
+                            <ul>
+                                <li><a href="#">Our Story</a></li>
+                                <li><a href="#">Contact Us</a></li>
+                                <li><a href="#">Terms of Service</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="header-icons">
+            <a href="#" aria-label="Account" class="icon-account"><i class="ph ph-user"></i></a>
+            <a href="#" aria-label="Search"><i class="ph ph-magnifying-glass"></i></a>
+            <a href="#" aria-label="Cart"><i class="ph ph-shopping-bag"></i></a>
+        </div>
+    </div>
+    
+    <!-- Mobile Drawer Menu -->
+    <div class="mobile-drawer-overlay" id="mobileDrawerOverlay"></div>
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-header">
+            <h2>XEON</h2>
+            <button id="closeMenuBtn" aria-label="Close menu"><i class="ph ph-x"></i></button>
+        </div>
+        <nav class="drawer-nav">
+            <ul>
+                <li><a href="{% url 'home' %}">HOME</a></li>
+                <li><a href="#">NEW IN</a></li>
+                <li><a href="#">BESTSELLERS</a></li>
+                <li><a href="#">SHOP</a></li>
+                <li><a href="#">COLLECTIONS</a></li>
+                <li><a href="{% url 'xeon:archive_sale' %}" class="highlight-red">ARCHIVE SALE</a></li>
+                <li><a href="#">ABOUT US</a></li>
+            </ul>
+        </nav>
+        <div class="drawer-footer">
+            <a href="#"><i class="ph ph-user"></i> Account</a>
+        </div>
+    </div>
+</header>

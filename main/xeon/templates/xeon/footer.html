@@ -1,0 +1,50 @@
+{% load static %}
+
+<!-- Footer -->
+<footer class="main-footer">
+    <div class="footer-container">
+        <div class="footer-brand">
+            <h2>XEON</h2>
+        </div>
+        <div class="footer-links-group">
+            <h4>QUICK LINKS</h4>
+            <ul>
+                <li><a href="#">Size Guide</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Refund Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="footer-links-group">
+            <h4>COMPANY</h4>
+            <ul>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Track Order</a></li>
+            </ul>
+        </div>
+        <div class="footer-about">
+            <h4>ABOUT XEON</h4>
+            <p>Xeon is a homegrown fashion label curated to deliver western design aesthetics to the women of India.
+                With a signature style flowing through every creative detail, the clothing speaks of luxury, elegant
+                silhouettes, and timeless pieces.</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; {% now "Y" %} Xeon. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<!-- Newsletter Popup -->
+<div class="popup-overlay" id="newsletterPopup">
+    <div class="popup-box">
+        <button class="popup-close" id="closePopup" aria-label="Close"><i class="ph ph-x"></i></button>
+        <h3>JOIN THE STYLE CLUB</h3>
+        <p>Exclusive drops, secret sales, and zero spam - we got you! &hearts;</p>
+        <form class="popup-form" method="POST" action="{% url 'home' %}">
+            {% csrf_token %}
+            {{ newsletter_form.email }}
+            <button type="submit" class="btn btn-dark">SUBSCRIBE</button>
+        </form>
+    </div>
+</div>

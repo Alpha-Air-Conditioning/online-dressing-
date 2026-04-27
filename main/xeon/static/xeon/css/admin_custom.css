@@ -1,0 +1,67 @@
+/* Custom Admin Styles for XEON */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+body, .content-wrapper, .main-header, .main-sidebar, .brand-link {
+    font-family: 'Outfit', sans-serif !important;
+}
+
+/* XEON Gold Accent Override */
+:root {
+    --primary: #d4af37;
+    --primary-hover: #b5952f;
+    --bg-dark: #0a0a0a;
+    --bg-panel: #141414;
+}
+
+[class*="sidebar-dark-"] .sidebar a {
+    color: #cccccc;
+}
+
+[class*="sidebar-dark-"] .nav-sidebar > .nav-item.menu-open > .nav-link, 
+[class*="sidebar-dark-"] .nav-sidebar > .nav-item:hover > .nav-link, 
+[class*="sidebar-dark-"] .nav-sidebar > .nav-item > .nav-link:focus {
+    background-color: rgba(212, 175, 55, 0.1);
+    color: var(--primary);
+}
+
+[class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link.active, 
+[class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link.active:focus, 
+[class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link.active:hover {
+    background-color: rgba(212, 175, 55, 0.2);
+    color: var(--primary);
+}
+
+.brand-link {
+    font-weight: 700 !important;
+    letter-spacing: 2px;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.card-primary.card-outline {
+    border-top: 3px solid var(--primary);
+}
+
+.page-item.active .page-link {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.main-header.navbar-dark {
+    background-color: var(--bg-panel);
+    border-bottom: 1px solid #222;
+}
+
+.main-sidebar.sidebar-dark-primary {
+    background-color: var(--bg-dark);
+}

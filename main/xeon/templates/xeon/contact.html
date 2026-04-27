@@ -1,0 +1,98 @@
+{% extends 'xeon/base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+
+<div class="page-hero">
+  <h1 class="page-hero-title">Get in <em>Touch</em></h1>
+  <p class="page-hero-sub">We'd love to hear from you</p>
+</div>
+
+<section class="section section--light">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;max-width:960px;margin:0 auto;" class="contact-grid-inner">
+
+      <!-- Contact Info -->
+      <div>
+        <h2 style="font-family:var(--font-serif);font-size:32px;margin-bottom:24px;">Contact <em>Details</em></h2>
+        <div style="display:flex;flex-direction:column;gap:24px;">
+          <div style="display:flex;gap:16px;align-items:flex-start;">
+            <span style="font-size:24px;">📍</span>
+            <div>
+              <strong style="display:block;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;">Address</strong>
+              <p style="font-size:14px;color:var(--color-text-muted);line-height:1.7;">42, Fashion Lane, Bandra West<br>Mumbai, Maharashtra — 400050</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:flex-start;">
+            <span style="font-size:24px;">📞</span>
+            <div>
+              <strong style="display:block;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;">Phone</strong>
+              <a href="tel:+919999999999" style="font-size:14px;color:var(--color-text-muted);">+91 99999 99999</a>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:flex-start;">
+            <span style="font-size:24px;">✉️</span>
+            <div>
+              <strong style="display:block;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;">Email</strong>
+              <a href="mailto:hello@xeonfashion.in" style="font-size:14px;color:var(--color-text-muted);">hello@xeonfashion.in</a>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:flex-start;">
+            <span style="font-size:24px;">🕐</span>
+            <div>
+              <strong style="display:block;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;">Working Hours</strong>
+              <p style="font-size:14px;color:var(--color-text-muted);line-height:1.7;">Monday – Saturday<br>10:00 AM – 6:00 PM IST</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div>
+        <h2 style="font-family:var(--font-serif);font-size:32px;margin-bottom:24px;">Send a <em>Message</em></h2>
+        <form id="contact-form">
+          {% csrf_token %}
+          <div class="form-group">
+            <label class="form-label" for="contact-name">Your Name</label>
+            <input id="contact-name" type="text" class="form-control" placeholder="Priya Sharma" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contact-email">Email Address</label>
+            <input id="contact-email" type="email" class="form-control" placeholder="priya@example.com" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contact-subject">Subject</label>
+            <input id="contact-subject" type="text" class="form-control" placeholder="Order enquiry / Size help / etc." />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contact-message">Message</label>
+            <textarea id="contact-message" class="form-control" rows="5" placeholder="How can we help you?" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('contact-form')?.addEventListener('submit', function(e) {
+  e.preventDefault();
+  // Show toast (no backend needed for this demo)
+  if (typeof showToast === 'function') {
+    showToast('Thank you! We\'ll get back to you within 24 hours.', 'success');
+  }
+  this.reset();
+});
+</script>
+<style>
+@media (max-width:768px) {
+  .contact-grid-inner { grid-template-columns: 1fr !important; }
+}
+</style>
+{% endblock %}

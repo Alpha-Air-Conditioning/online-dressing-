@@ -1,0 +1,164 @@
+{% extends 'xeon/base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+
+<!-- Page Hero -->
+<div class="page-hero">
+  <h1 class="page-hero-title">
+    {% if selected_category %}{{ selected_category.name }}
+    {% elif section_title %}{{ section_title }}
+    {% else %}Our Collection{% endif %}
+  </h1>
+  <p class="page-hero-sub">
+    {% if total_count %}{{ total_count }} styles{% endif %}
+    {% if search_query %} matching "{{ search_query }}"{% endif %}
+  </p>
+</div>
+
+<section class="section section--light" style="padding-top:40px;">
+  <div class="container">
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <div class="filter-categories" role="group" aria-label="Filter by category">
+        <a href="{% url 'xeon:collection' %}"
+           class="filter-chip {% if not selected_category %}active{% endif %}">
+          All
+        </a>
+        {% for cat in categories %}
+        <a href="{% url 'xeon:collection' %}?category={{ cat.slug }}"
+           class="filter-chip {% if selected_category.slug == cat.slug %}active{% endif %}">
+          {{ cat.name }}
+        </a>
+        {% endfor %}
+      </div>
+
+      <div class="filter-right">
+        <span class="result-count">{{ total_count|default:products.paginator.count }} items</span>
+        <select id="sort-select" class="sort-select" aria-label="Sort products">
+          <option value="newest"    {% if sort == 'newest'    %}selected{% endif %}>Newest First</option>
+          <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+          <option value="price_desc"{% if sort == 'price_desc'%}selected{% endif %}>Price: High to Low</option>
+          <option value="oldest"    {% if sort == 'oldest'    %}selected{% endif %}>Oldest First</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    {% if products %}
+    <div class="product-grid">
+      {% for product in products %}
+      <article class="product-card fade-up"
+               data-product-id="{{ product.id }}"
+               data-href="{{ product.get_absolute_url }}"
+               tabindex="0" role="article" aria-label="{{ product.name }}">
+
+        <div class="product-card-img-wrap">
+          {% if product.image %}
+          <img src="{{ product.image.url }}"
+               alt="{{ product.name }}"
+               class="product-card-img main-img"
+               loading="lazy" />
+          {% if product.hover_image %}
+          <img src="{{ product.hover_image.url }}"
+               alt="{{ product.name }} hover"
+               class="product-card-img hover-img"
+               loading="lazy" />
+          {% endif %}
+          {% else %}
+          <div class="product-card-img" style="display:flex;align-items:center;justify-content:center;font-size:60px;background:#f5f0ea;">👗</div>
+          {% endif %}
+
+          {% if product.is_on_sale %}
+          <span class="product-badge badge-sale">–{{ product.discount_percent }}%</span>
+          {% elif product.is_new %}
+          <span class="product-badge badge-new">New</span>
+          {% endif %}
+
+          <button class="product-wishlist" aria-label="Add to wishlist">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            </svg>
+          </button>
+
+          <div class="quick-add-overlay">
+            {% with product.get_sizes_list as sizes %}
+            {% if sizes %}
+            <div class="quick-add-sizes">
+              {% for size in sizes %}
+              <button class="size-chip {% if forloop.first %}selected{% endif %}" data-size="{{ size }}">{{ size }}</button>
+              {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+            <button class="btn-quick-add"><span>Add to Cart</span></button>
+          </div>
+        </div>
+
+        <div class="product-info">
+          {% if product.category %}
+          <span class="product-category-tag">{{ product.category.name }}</span>
+          {% endif %}
+          <h3 class="product-name">{{ product.name }}</h3>
+          <div class="product-prices">
+            <span class="product-price {% if product.is_on_sale %}sale{% endif %}">₹{{ product.price }}</span>
+            {% if product.is_on_sale %}
+            <span class="product-original-price">₹{{ product.original_price }}</span>
+            {% endif %}
+          </div>
+          <div class="product-card-actions">
+            <a href="{{ product.get_absolute_url }}" class="btn btn-outline btn-sm">View</a>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if products.has_other_pages %}
+    <nav class="pagination" aria-label="Product pages">
+      {% if products.has_previous %}
+      <a href="?page={{ products.previous_page_number }}{% if sort %}&sort={{ sort }}{% endif %}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}"
+         class="page-btn" aria-label="Previous page">
+        ‹
+      </a>
+      {% endif %}
+
+      {% for num in products.paginator.page_range %}
+        {% if products.number == num %}
+        <span class="page-btn active" aria-current="page">{{ num }}</span>
+        {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+        <a href="?page={{ num }}{% if sort %}&sort={{ sort }}{% endif %}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}"
+           class="page-btn">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if products.has_next %}
+      <a href="?page={{ products.next_page_number }}{% if sort %}&sort={{ sort }}{% endif %}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}"
+         class="page-btn" aria-label="Next page">
+        ›
+      </a>
+      {% endif %}
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <!-- Empty State -->
+    <div class="empty-state">
+      <div class="empty-state-icon">🔍</div>
+      <h2 class="empty-state-title">No products found</h2>
+      <p class="empty-state-text">
+        {% if search_query %}No results for "<strong>{{ search_query }}</strong>". Try a different search.
+        {% else %}No products in this category yet. Check back soon!{% endif %}
+      </p>
+      <a href="{% url 'xeon:collection' %}" class="btn btn-primary mt-4">Browse All</a>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% endblock %}
